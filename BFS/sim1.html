@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BFS Algorithm</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css">
+  <link rel="stylesheet" href="sim1.css">
+</head>
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  height: 100px;
+  width: 100%;
+  border: 2px solid red;
+  background: hsl(253, 59%, 48%);
+  display: flex;
+  padding: 10px;
+  color: white;
+}
+
+.header > h1 {
+  align-items: center;
+  margin-left: 400px;
+  margin-top: 25px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply the spinning animation to the image */
+.spinning-image {
+  animation: spin 2s linear infinite;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  /* height:150px;
+width:50px; */
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  background-color: wheat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.out {
+  height: 100px;
+  width: 800px;
+  border: 2px solid black;
+  margin-top: 10px;
+  border-radius: 10px;
+  display: flex;
+  background-color: #4c43cd;
+  background-image: radial-gradient(93% 87% at 87% 89%, rgba(0, 0, 0, 0.23) 0%, transparent 86.18%),
+    radial-gradient(66% 87% at 26% 20%, rgba(255, 255, 255, 0.41) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%);
+  justify-content: center;
+  color: white;
+}
+
+#network {
+  width: 1000px;
+  height: 400px;
+  border: 3px solid black;
+  border-radius: 20%;
+  margin-bottom: 20px;
+  background-color: rgb(223, 197, 197);
+}
+
+#output {
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  margin-top: 50px;
+  justify-content: center;
+  margin-left: -30px;
+}
+
+.btn {
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 100px;
+  background-color: #e63030;
+  background-image: radial-gradient(93% 87% at 87% 89%, rgba(0, 0, 0, 0.23) 0%, transparent 86.18%),
+    radial-gradient(66% 87% at 26% 20%, rgba(255, 255, 255, 0.41) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: 2px 19px 31px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  font-size: 16px;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.visited {
+  background-color: red;
+}
+
+.visitedEdge {
+  color: #666666;
+}
+</style>
+<body>
+  <header class="header">
+    <img class="spinning-image" src="logo.png" alt="Spinning Image">
+    <h1 class="heading">BFS Algorithm</h1>
+  </header>
+  <main>
+    <br>
+    <div id="network"></div>
+    <div>
+      <label for="nodes">Number of Nodes:</label>
+      <input type="number" id="nodes" min="1">
+      <button class="btn" onclick="generateGraph()">Generate Graph</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+      <label for="start">Start Node:</label>
+      <input type="number" id="start" min="0">
+      <button class="btn" onclick="runBFS()">Run BFS</button>
+      <button class="btn" id="next" onclick="nextStep()">Next</button>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="out">
+      <header class="div_header">
+        <h3>ANSWER</h3>
+      </header>
+      <pre id="output"></pre>
+    </div>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.js"></script>
+  <script src="sim1.js">
+    let graph = []; // Adjacency matrix
+let network = null; // Network visualization object
+let nextButtonClicked = false; // Variable to track the "Next" button click
+
+// Function to generate the adjacency matrix based on the number of nodes
+function generateGraph() {
+  const nodes = parseInt(document.getElementById('nodes').value);
+
+  if (nodes >= 1) {
+    graph = generateRandomGraph(nodes);
+    displayGraph(graph);
+    clearOutput();
+  } else {
+    alert('Invalid input. Please enter a valid number of nodes.');
+  }
+}
+
+// Function to generate a random graph
+function generateRandomGraph(nodes) {
+  const generatedGraph = new Array(nodes).fill(0).map(() => new Array(nodes).fill(0));
+
+  for (let i = 0; i < nodes; i++) {
+    for (let j = i + 1; j < nodes; j++) {
+      if (Math.random() < 0.5) {
+        generatedGraph[i][j] = 1;
+        generatedGraph[j][i] = 1;
+      }
+    }
+  }
+
+  return generatedGraph;
+}
+
+// BFS algorithm implementation
+async function bfs(graph, start) {
+  const queue = [start];
+  const visited = new Array(graph.length).fill(false);
+  visited[start] = true;
+
+  const path = [];
+  let step = 0; // Variable to track the current step
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    path.push(current);
+
+    // Change node color to red and highlight visited node
+    network.body.data.nodes.update({ id: current, color: { background: 'purple', border: 'purple' } });
+    await sleep(1000); // Add a delay of 1 second
+    network.body.data.nodes.update({ id: current, color: { background: 'grey', border: 'black' } });
+
+    for (let i = 0; i < graph[current].length; i++) {
+      if (graph[current][i] === 1 && !visited[i]) {
+        queue.push(i);
+        visited[i] = true;
+
+        // Darken the edge color and highlight visited edge
+        network.body.data.edges.update({ id: `${current}-${i}`, color: '#666666', font: { color: '#666666' } });
+        await sleep(1000); // Add a delay of 1 second
+        network.body.data.edges.update({ id: `${current}-${i}`, color: 'grey', font: { color: 'grey' } });
+      }
+    }
+
+    step++; // Increment the step counter
+    const output = document.getElementById('output');
+
+    // Provide a description of the current step
+    output.innerText = `Step ${step}: Visiting Node ${current}`;
+
+    // If the "Next" button is clicked, pause execution until the next step
+    if (await waitForNextStep()) {
+      // Resume execution only if the "Next" button is clicked
+      continue;
+    }
+
+    // If all steps are completed, exit the loop
+    if (step === path.length) {
+      break;
+    }
+  }
+
+  return path;
+}
+
+// Function to create and display the graph visualization using vis.js
+function displayGraph(graph) {
+  const container = document.getElementById('network');
+
+  // Create an array of nodes
+  const nodes = new vis.DataSet(
+    graph.map((_, index) => ({ id: index, label: String(index) }))
+  );
+
+  // Create an array of edges
+  const edges = [];
+  for (let i = 0; i < graph.length; i++) {
+    for (let j = i + 1; j < graph.length; j++) {
+      if (graph[i][j] === 1) {
+        edges.push({ id: `${i}-${j}`, from: i, to: j });
+      }
+    }
+  }
+
+  // Create a data object with nodes and edges
+  const data = {
+    nodes: nodes,
+    edges: edges
+  };
+
+  // Create options for the network visualization
+  const options = {
+    physics: false,
+    edges: {
+      color: {
+        color: 'black'
+      },
+      font: {
+        color: 'green'
+      }
+    }
+  };
+
+  // Create a network visualization
+  network = new vis.Network(container, data, options);
+  network.fit(); // Fit the graph to the container
+}
+
+// Run BFS algorithm and display the result
+async function runBFS() {
+  const startNode = parseInt(document.getElementById('start').value);
+
+  if (startNode >= 0 && startNode < graph.length) {
+    const path = await bfs(graph, startNode);
+    const output = document.getElementById('output');
+    output.innerText = `BFS Path from Node ${startNode}: ${path.join(' -> ')}`;
+  } else {
+    alert('Invalid input. Please enter a valid node number.');
+  }
+}
+
+// Function to handle the "Next" button click
+function nextStep() {
+  nextButtonClicked = true;
+}
+
+// Function to wait until the "Next" button is clicked
+async function waitForNextStep() {
+  while (!nextButtonClicked) {
+    await sleep(100); // Wait for 0.1 second
+  }
+
+  nextButtonClicked = false; // Reset the variable
+  return true; // Signal that the "Next" button is clicked
+}
+
+// Helper function to sleep for a given duration
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Function to clear the output text
+function clearOutput() {
+  const output = document.getElementById('output');
+  output.innerText = '';
+}
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BFS Algorithm</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css">
+</head>
+<body>
+  <header class="header">
+    <img class="spinning-image" src="logo.png" alt="Spinning Image">
+    <h1 class="heading">BFS Algorithm</h1>
+  </header>
+  <main>
+    <br>
+    <div id="network"></div>
+    <div>
+      <label for="nodes">Number of Nodes:</label>
+      <input type="number" id="nodes" min="1">
+      <button class="btn" onclick="generateGraph()">Generate Graph</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+      <label for="start">Start Node:</label>
+      <input type="number" id="start" min="0">
+      <button class="btn" onclick="runBFS()">Run BFS</button>
+      <button class="btn" id="next" onclick="nextStep()">Next</button>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="out">
+      <header class="div_header">
+        <h3>ANSWER</h3>
+      </header>
+      <pre id="output"></pre>
+    </div>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.js"></script>
+  <script>
+    </script>
+</body>
+</html>

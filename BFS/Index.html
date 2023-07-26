@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/gh/CDNSFree2/PrismJS@latest/prism.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Breadth First Search
+    </title>
+    <link rel="stylesheet" href="Index.css" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/CDNSFree2/PrismJS@latest/prism.min.css">
+</head>
+
+<body>
+    <header>
+        <div>
+            <img class="logo" src="logo.png">
+            <h1>V-Lab @ ANDC</h1>
+        </div>
+        <ul class="navigation">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../../../index.html#labs_section">Labs</a></li>
+            <li><a href="../../../index.html#team">Team</a></li>
+            <li><a href="https://www.andcollege.du.ac.in/" target="_blank" rel="noopener noreferrer">College Website</a>
+            </li>
+        </ul>
+    </header>
+    <div class="exp-heading">
+        <h1>Breadth First Search (BFS)</h1>
+    </div>
+    <nav>
+        <div class="boxq">
+            <a class="internal_link" href="#aim">
+                <img class="icon"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBmpbB3jSjMF-FDgIL1E-eRN6eeCDLSsvoAQ&usqp=CAU"><br>
+                Aim</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#theory">
+                <img class="icon" src="https://cdn-icons-png.flaticon.com/512/1648/1648697.png"><br>
+                Theory</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#procedure">
+                <img class="icon"
+                    src="https://cdn4.iconfinder.com/data/icons/project-management-1-11/65/23-512.png"><br>
+                Procedure</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#practice">
+                <img class="icon"
+                    src="https://static.rfstat.com/renderforest/images/v2/landing-pics/logo-animation/editable-minimal.png?v=6"><br>
+                Practice</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#code">
+                <img class="icon"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/110px-Python-logo-notext.svg.png"><br>
+                Python Code</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#quiz">
+                <img class="icon"
+                    src="https://img.favpng.com/21/11/8/new-york-city-fotolia-stock-photography-sales-png-favpng-f9ZiUMqBcZK0LNfZPfC674ZxZ_t.jpg"><br>
+                Quiz</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#result">
+                <img class="icon"
+                    src="https://cdn4.iconfinder.com/data/icons/collection-of-online-business-icons/64/Board_Chart_Results_Business-512.png"><br>
+                Result</a>
+        </div>
+        <div class="boxq">
+            <a class="internal_link" href="#references">
+                <img class="icon" src="https://image.pngaaa.com/134/5592134-middle.png"><br>
+                References</a>
+        </div>
+    </nav>
+    <section id="exp">
+        <div class="container">
+            <div class="box" id="aim">
+                <div class="title">
+                    <h2 class="heading">Aim</h2>
+                </div>
+                <div class="desc1">
+                    <p class="desc"> To search a tree or graph data structure for a node that meets a set of criteria using BFS</p>
+                </div>
+            </div>
+            <div class="box" id="theory">
+                <div class="title">
+                    <h1 class="heading">Theory</h1>
+                </div>
+                <div class="desc1">
+                    <p class="desc">
+                        Breadth-first search is a graph traversal algorithm that starts traversing the graph from the root node and explores all the neighboring nodes. Then, it selects the nearest node and explores all the unexplored nodes. While using BFS for traversal, any node in the graph can be considered as the root node.
+                    </p>
+                </div>
+            </div>
+            <div class="box" id="procedure">
+                <div class="title">
+                    <h2 class="heading">Procedure</h2>
+                </div>
+                <div class="desc1">
+                        <ol class="desc" type="1">
+                            <li>Create an empty queue data structure. This queue will hold the nodes to be explored. </li>
+                            <li>Mark the starting node as visited and enqueue it into the queue.</li>
+                            <li>While the queue is not empty, repeat steps 5-7.
+                            </li>
+                            <li>Dequeue a node from the front of the queue. This node will be the current node for exploration.</li>
+                            <li>Process the current node (print it, store it, or perform any desired operation).</li>
+                            <li>Enqueue all the unvisited neighbors of the current node into the queue and mark them as visited.</li>
+                            <li>Repeat steps 5-7 until the queue becomes empty.</li>
+                            <li>If there are still unvisited nodes in the graph, select one of them as the new starting node and repeat steps 3-8.</li>
+                            <li>Once all nodes have been visited or processed, the BFS traversal is complete.
+                            </li>
+                        </ol>
+                </div>
+            </div>
+                <div class="box" id="practice">
+                    <div class="title">
+                        <h2 class="heading">Simulation</h2>
+                    </div>
+                    <button class="submit"><a href="sim1.html" target="new">Simulation of BFS</a></button>
+                </div>
+                
+                <div class="box" id="code">
+                    <div class="title">
+                        <h2 class="heading">Python Code</h2>
+                    </div>
+                    <pre>
+                        <code class="language-python line-numbers">
+                            <hr>
+                            from collections import deque
+                            def bfs(graph, start):
+                                visited = set()                 # Set to keep track of visited nodes
+                                queue = deque([start])          # Create a queue and enqueue the starting node
+                
+                                while queue:
+                                    node = queue.popleft()      # Dequeue a node from the front of the queue
+                                    print(node)                 # Process the current node (you can replace this with your desired operation)
+                
+                                    if node not in visited:
+                                        visited.add(node)       # Mark the node as visited
+                
+                                        # Enqueue all the unvisited neighbors of the current node into the queue
+                                        for neighbor in graph[node]:
+                                            if neighbor not in visited:
+                                                queue.append(neighbor)
+                
+                            # Example usage
+                            # Define the graph as an adjacency list
+                            graph = {
+                                'A': ['B', 'C'],
+                                'B': ['D', 'E'],
+                                'C': ['F'],
+                                'D': [],
+                                'E': ['F'],
+                                'F': []
+                            }
+                
+                            # Call the BFS function with the graph and the starting node
+                            bfs(graph, 'A')
+                        </code>
+                    </pre>
+                </div>
+
+                <div class="box" id="result">
+                    <div class="title">
+                        <h2 class="heading">Result</h2>
+                    </div>
+                    <div class="desc1">
+                        <p class="desc">Hence we can perform searching of all the vertices of a graph using BFS.</p>
+                    </div>
+                </div>
+
+            </div>                
+                <div class="box">
+                    <div class="title" id="references">
+                        <h2 class="heading">References</h2>
+                    </div>
+                    <div class="desc1">
+                        <p class="desc"><a href="https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/">GeeksforGeeks</a></p>
+                        <p class="desc"><a href="https://www.tutorialspoint.com/data_structures_algorithms/breadth_first_traversal.htm">tutorial point (BFS)</a></p>
+                    </div>
+                </div>
+    </section>
+    <script src="index.js"></script>
+</body>
+
+</html>
